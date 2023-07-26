@@ -1,7 +1,7 @@
 /* global $, localStorage, Shell */
 
 const errors = {
-  invalidDirectory: 'Error: not a valid directory',
+  invalidDirectory: `Error: not a valid directory  # could be a file try "cat filename"`,
   noWriteAccess: 'Error: you do not have write access to this directory',
   fileNotFound: 'Error: file not found in current directory',
   fileNotSpecified: 'Error: you did not specify a file',
@@ -9,38 +9,34 @@ const errors = {
 };
 
 const struct = {
-  root: ['about', 'resume', 'contact', 'talks'],
+  root: ['about', 'resume', 'contact'],
   skills: ['proficient', 'familiar'],
 };
 
 const commands = {};
 let systemData = {};
-const rootPath = 'users/codebytere/root';
+const rootPath = '/termi/root';
 
 const getDirectory = () => localStorage.directory;
 const setDirectory = (dir) => {
   localStorage.directory = dir;
 };
 
-// Turn on fullscreen.
+// Turn on fullscreen. //
 const registerFullscreenToggle = () => {
-  $('.button.green').click(() => {
+  $('.button.maxi').click(() => {
     $('.terminal-window').toggleClass('fullscreen');
   });
 };
+// Turn to minimized //
 const registerMinimizedToggle = () => {
-  $('.button.yellow').click(() => {
+  $('.button.mini').click(() => {
     $('.terminal-window').toggleClass('minimized');
   });
 };
 
-// Create new directory in current directory.
 commands.mkdir = () => errors.noWriteAccess;
-
-// Create new directory in current directory.
 commands.touch = () => errors.noWriteAccess;
-
-// Remove file from current directory.
 commands.rm = () => errors.noWriteAccess;
 
 // View contents of specified directory.
@@ -104,13 +100,13 @@ commands.cat = (filename) => {
     const fileKey = filename.split('.')[0];
     const isValidFile = (filename) => systemData.hasOwnProperty(filename);
 
-    if (isValidFile(fileKey) && hasValidFileExtension(filename, '.txt')) {
+    if (isValidFile(fileKey) && hasValidFileExtension(filename, '')) {
       return systemData[fileKey];
     }
   }
 
   if (isFileInDirectory(filename)) {
-    if (hasValidFileExtension(filename, '.txt')) {
+    if (hasValidFileExtension(filename, '')) {
       const directories = filename.split('/');
       const directory = directories.slice(0, 1).join(',');
       const fileKey = directories.slice(1, directories.length).join(',').split('.')[0];
@@ -144,7 +140,6 @@ $(() => {
   pages.push($.get('pages/resume.html'));
   pages.push($.get('pages/root.html'));
   pages.push($.get('pages/skills.html'));
-  pages.push($.get('pages/talks.html'));
   $.when
     .apply($, pages)
     .done(
@@ -157,7 +152,6 @@ $(() => {
         resumeData,
         rootData,
         skillsData,
-        talksData,
       ) => {
         systemData['about'] = aboutData[0];
         systemData['contact'] = contactData[0];
@@ -167,7 +161,6 @@ $(() => {
         systemData['resume'] = resumeData[0];
         systemData['root'] = rootData[0];
         systemData['skills'] = skillsData[0];
-        systemData['talks'] = talksData[0];
       },
     );
 
