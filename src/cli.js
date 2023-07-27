@@ -98,7 +98,7 @@ commands.cat = (filename) => {
 
   if (!isFileInDirectory(filename)) {
     const fileKey = filename.split('.')[0];
-    const isValidFile = (filename) => systemData.hasOwnProperty(filename);
+    const isValidFile = (filename) => Object.values(struct[getDirectory()]).includes(filename);
 
     if (isValidFile(fileKey) && hasValidFileExtension(filename, '')) {
       return systemData[fileKey];
